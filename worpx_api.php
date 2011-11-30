@@ -312,7 +312,7 @@ class worpx_api {
         $document_id = htmlentities($document_id);
         $document_guid = htmlentities($document_guid);
         if (empty($document_guid)) {
-            $document_guid = htmlentities(uniqid(null, true));
+            $document_guid = htmlentities(sha1(uniqid(null, true)));
         }
         if ($this->batch_open == true and $this->request_open == true) {
             $this->batch_xml .= "<request_parm>
