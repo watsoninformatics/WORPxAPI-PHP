@@ -9,6 +9,28 @@ class worpx_api {
         $this->last_message = null;
     }
 
+    function getGUID() {
+        if (function_exists('com_create_guid')) {
+            $g = str_replace(chr(123), "", com_create_guid());
+            $g = str_replace(chr(125), "", $g);
+            return $g;
+        } else {
+            mt_srand((double) microtime() * 10000); //optional for php 4.2.0 and up.
+            $charid = strtoupper(md5(uniqid(rand(), true)));
+            $hyphen = chr(45); // "-"
+            $uuid = chr(123)// "{"
+                    . substr($charid, 0, 8) . $hyphen
+                    . substr($charid, 8, 4) . $hyphen
+                    . substr($charid, 12, 4) . $hyphen
+                    . substr($charid, 16, 4) . $hyphen
+                    . substr($charid, 20, 12)
+                    . chr(125); // "}"
+            $g = str_replace(chr(123), "", $uuid);
+            $g = str_replace(chr(125), "", $g);
+            return $g;
+        }
+    }
+
     function setServer($server_url) {
         $this->server_url = $server_url;
     }
@@ -312,7 +334,7 @@ class worpx_api {
         $document_id = htmlentities($document_id);
         $document_guid = htmlentities($document_guid);
         if (empty($document_guid)) {
-            $document_guid = htmlentities(sha1(uniqid(null, true)));
+            $document_guid = htmlentities($this->getGUID());
         }
         if ($this->batch_open == true and $this->request_open == true) {
             $this->batch_xml .= "<request_parm>
