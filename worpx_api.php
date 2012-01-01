@@ -639,6 +639,28 @@ class worpx_api {
             return false;
         }
     }
+    
+    function getTemplateString($document_id) {
+        $return = file_get_contents("{$this->server_url}/retrievetemplate.php?doc_id={$document_id}&token={$this->token}");
+        if (!empty($return)) {
+            return $return;
+        } else {
+            return false;
+        }
+    }
+
+    function writeTemplateToFile($document_id, $file_location) {
+        $return = file_get_contents("{$this->server_url}/retrievetemplate.php?doc_id={$document_id}&token={$this->token}");
+        if (!empty($return)) {
+            if (file_put_contents($file_location, $return)) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
 
 }
 
